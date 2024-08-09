@@ -1,2 +1,4 @@
+### SmartComplete
+
 SmartComplete is an automatic text generation system that uses a robust WordLSTM model to accurately predict and generate text sequences. The model WordLSTM was built using bi-directional lastm layers allowing model to process the data in both directions. This language model incorporates several techniques to optimize the training and its predictions capabilities like using xavier uniform distribution for weight initialization and dynamically adjusting the drop out rates to improve generalization.
 SmartComplete employs a n-gram pre-processing strategy on a large dialogue dataset, significantly improving its ability to learn long-range dependencies. The system ultimately achieves 90% accuracy in predicting the next sequence, demonstrating its exceptional capacity to adapt to various text generation tasks with high precision.
