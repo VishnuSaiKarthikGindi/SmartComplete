@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Generation with LSTM</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-image: url('https://coolbackgrounds.io/images/backgrounds/index/aqua-d9b59c89.png');
+            background-size: cover;
+            color: #fff;
+        }
+        h1 {
+            text-align: center;
+            color: #003366; 
+            font-size: 3em;
+        }
+        input, button {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: none;
+            font-size: 1em;
+            background: rgba(255, 255, 255, 0.7);
+        }  
+        button {
+            width: 50%; 
+            display: block;
+            margin: 10px auto;
+            padding: 15px;
+            border-radius: 5px;
+            border: none;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #ff4dc4; /* Darker pink on hover */
+        }
+        textarea {
+            width: 100%;
+            height: 100px;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: none;
+            font-size: 1.2em;
+            background: rgba(255, 255, 255, 0.7); /* Slightly transparent */
+            color: #333;
+            transition: background 0.3s ease;
+        }
+        textarea:focus {
+            background: rgba(255, 255, 255, 0.9); /* More opaque on focus */
+        }
+        h3 {
+            color: #006699; /* Different shade for Generated Sequence heading */
+            text-align: center;
+            font-size: 1.8em;
+        }
+        #output {
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-size: 1.2em;
+            color: #fff;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <h1>SmartComplete</h1>
+    <textarea id="seed_text" placeholder="Enter seed text"></textarea>
+    <input type="number" id="num_tokens" placeholder="Number of tokens to generate" value="6">
+    <button onclick="generateText()">Complete Sequence</button>
+    <h3>Generated Sequence:</h3>
+    <div id="output"></div>
+
+    <script>
+        async function generateText() {
+            const seedText = document.getElementById('seed_text').value;
+            const numTokens = document.getElementById('num_tokens').value;
+            const outputDiv = document.getElementById('output');
+
+            outputDiv.textContent = "Generating ...";
+
+            try {
+                const response = await fetch('http://localhost:8080/generate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        seed_text: seedText,
+                        num_tokens: parseInt(numTokens)
+                    }),
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    outputDiv.textContent = data.generated_text;
+                } else {
+                    outputDiv.textContent = data.error || "Error generating text";
+                }
+            } catch (error) {
+                outputDiv.textContent = "An error occurred: " + error.message;
+            }
+        }
+    </script>
+</body>
+</html>
